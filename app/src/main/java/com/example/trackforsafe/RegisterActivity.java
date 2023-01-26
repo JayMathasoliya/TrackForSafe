@@ -165,6 +165,8 @@ public class RegisterActivity extends AppCompatActivity {
                                                         Toast.makeText(RegisterActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
                                                         startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                                                     } else {
+                                                        registerbtn.setVisibility(View.VISIBLE);
+                                                        progressBar2.setVisibility(View.GONE);
                                                         Toast.makeText(RegisterActivity.this, "Registered Error : " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                                                     }
                                                 });

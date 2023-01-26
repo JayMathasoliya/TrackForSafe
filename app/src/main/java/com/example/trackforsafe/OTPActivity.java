@@ -72,7 +72,7 @@ public class OTPActivity extends AppCompatActivity {
                         if (task.isSuccessful()){
                             verifyotpbtn.setVisibility(View.VISIBLE);
                             progressBar4.setVisibility(View.GONE);
-                            Intent intent1 = new Intent(getApplicationContext(),WelcomeActivity.class);
+                            Intent intent1 = new Intent(getApplicationContext(),HomeActivity.class);
                             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent1);
                         }

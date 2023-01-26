@@ -61,57 +61,59 @@ public class LoginActivity extends AppCompatActivity {
 
         loginbtn.setOnClickListener(view -> {
 
-            String user = Objects.requireNonNull(usernameoremail.getEditText()).getText().toString().trim();
+            String username = Objects.requireNonNull(usernameoremail.getEditText()).getText().toString().trim();
             String pass = Objects.requireNonNull(password.getEditText()).getText().toString().trim();
 
-            if(user.equals("") || pass.equals("")){
+            if(username.equals("") || pass.equals("")){
                 Toast.makeText(this, "Please enter required fields", Toast.LENGTH_SHORT).show();
             }
             else{
                 loginbtn.setVisibility(View.GONE);
                 progressBar1.setVisibility(View.VISIBLE);
-                databaseReference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(!validateEmail()){
-                            final String databasephone = Objects.requireNonNull(snapshot.child(user).child("Phone Number").getValue()).toString();
-                            if(user.equals(databasephone)){
-                                final String getPass = Objects.requireNonNull(snapshot.child(user).child("Password").getValue()).toString();
-                                if(getPass.equals(pass)){
-                                    loginbtn.setVisibility(View.VISIBLE);
-                                    progressBar1.setVisibility(View.GONE);
-                                    Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(),MobileNumberActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                                else{
-                                    Toast.makeText(LoginActivity.this, "Please enter valid password", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            else{
-                                Toast.makeText(LoginActivity.this, "Please do registration first", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        else{
-                            mAuth.signInWithEmailAndPassword(user,pass).addOnCompleteListener(task -> {
+//                databaseReference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        if(!validateEmail()){
+//                            final String databasephone = Objects.requireNonNull(snapshot.child(username).child("Phone Number").getValue()).toString();
+//                            if(username.equals(databasephone)){
+//                                final String getPass = Objects.requireNonNull(snapshot.child(username).child("Password").getValue()).toString();
+//                                if(getPass.equals(pass)){
+//                                    loginbtn.setVisibility(View.VISIBLE);
+//                                    progressBar1.setVisibility(View.GONE);
+//                                    Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+//                                    Intent intent = new Intent(getApplicationContext(),MobileNumberActivity.class);
+//                                    startActivity(intent);
+//                                    finish();
+//                                }
+//                                else{
+//                                    Toast.makeText(LoginActivity.this, "Please enter valid password", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                            else{
+//                                Toast.makeText(LoginActivity.this, "Please do registration first", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                        else{
+                            mAuth.signInWithEmailAndPassword(username,pass).addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     loginbtn.setVisibility(View.VISIBLE);
                                     progressBar1.setVisibility(View.GONE);
                                     Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(LoginActivity.this,MobileNumberActivity.class));
                                 } else {
+                                    loginbtn.setVisibility(View.VISIBLE);
+                                    progressBar1.setVisibility(View.GONE);
                                     Toast.makeText(LoginActivity.this, "Login Error : " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
-                        }
-                    }
+//                        }
+//                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
             }
         });
     }

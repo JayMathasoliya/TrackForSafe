@@ -69,10 +69,10 @@ public class MobileNumberActivity extends AppCompatActivity {
         };
 
         sendOTP.setOnClickListener(view -> {
+            sendOTP.setVisibility(View.GONE);
+            progressBar3.setVisibility(View.VISIBLE);
             if(!enternumber.getText().toString().trim().isEmpty()){
                 if((enternumber.getText().toString().trim()).length() == 10) {
-                    sendOTP.setVisibility(View.GONE);
-                    progressBar3.setVisibility(View.VISIBLE);
                     String mno = "+" + countrycode + enternumber.getText().toString();
 
                     FirebaseAuthSettings firebaseAuthSettings = mAuth.getFirebaseAuthSettings();
@@ -89,10 +89,14 @@ public class MobileNumberActivity extends AppCompatActivity {
                     progressBar3.setVisibility(View.GONE);
                 }
                 else{
+                    sendOTP.setVisibility(View.VISIBLE);
+                    progressBar3.setVisibility(View.GONE);
                     Toast.makeText(MobileNumberActivity.this, "Please enter correct number", Toast.LENGTH_SHORT).show();
                 }
             }
             else{
+                sendOTP.setVisibility(View.VISIBLE);
+                progressBar3.setVisibility(View.GONE);
                 Toast.makeText(MobileNumberActivity.this, "Enter Mobile Number", Toast.LENGTH_SHORT).show();
             }
         });
