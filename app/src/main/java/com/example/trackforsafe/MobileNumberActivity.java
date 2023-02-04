@@ -49,17 +49,22 @@ public class MobileNumberActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
-
+                sendOTP.setVisibility(View.VISIBLE);
+                progressBar3.setVisibility(View.GONE);
             }
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
+                sendOTP.setVisibility(View.VISIBLE);
+                progressBar3.setVisibility(View.GONE);
                 Toast.makeText(MobileNumberActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCodeSent(@NonNull String verificationId,
                                    @NonNull PhoneAuthProvider.ForceResendingToken token) {
+                sendOTP.setVisibility(View.VISIBLE);
+                progressBar3.setVisibility(View.GONE);
                 Intent intent = new Intent(getApplicationContext(),OTPActivity.class);
                 intent.putExtra("mobile",enternumber.getText().toString());
                 intent.putExtra("countrycode",countrycode);
@@ -69,14 +74,13 @@ public class MobileNumberActivity extends AppCompatActivity {
         };
 
         sendOTP.setOnClickListener(view -> {
-            sendOTP.setVisibility(View.GONE);
-            progressBar3.setVisibility(View.VISIBLE);
             if(!enternumber.getText().toString().trim().isEmpty()){
                 if((enternumber.getText().toString().trim()).length() == 10) {
                     String mno = "+" + countrycode + enternumber.getText().toString();
-
-                    FirebaseAuthSettings firebaseAuthSettings = mAuth.getFirebaseAuthSettings();
-                    firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(mno, smsCode);
+                    sendOTP.setVisibility(View.INVISIBLE);
+                    progressBar3.setVisibility(View.VISIBLE);
+//                    FirebaseAuthSettings firebaseAuthSettings = mAuth.getFirebaseAuthSettings();
+//                    firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(mno, smsCode);
                     PhoneAuthOptions options =
                             PhoneAuthOptions.newBuilder(mAuth)
                                     .setPhoneNumber(mno)       // Phone number to verify
@@ -85,18 +89,12 @@ public class MobileNumberActivity extends AppCompatActivity {
                                     .setCallbacks(mCallbacks)
                                     .build();
                     PhoneAuthProvider.verifyPhoneNumber(options);
-                    sendOTP.setVisibility(View.VISIBLE);
-                    progressBar3.setVisibility(View.GONE);
                 }
                 else{
-                    sendOTP.setVisibility(View.VISIBLE);
-                    progressBar3.setVisibility(View.GONE);
                     Toast.makeText(MobileNumberActivity.this, "Please enter correct number", Toast.LENGTH_SHORT).show();
                 }
             }
             else{
-                sendOTP.setVisibility(View.VISIBLE);
-                progressBar3.setVisibility(View.GONE);
                 Toast.makeText(MobileNumberActivity.this, "Enter Mobile Number", Toast.LENGTH_SHORT).show();
             }
         });

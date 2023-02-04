@@ -67,12 +67,15 @@ public class OTPActivity extends AppCompatActivity {
                         + num4.getText().toString() + num5.getText().toString() + num6.getText().toString();
 
                 if(getOTPbackend != null){
+                    verifyotpbtn.setVisibility(View.INVISIBLE);
+                    progressBar4.setVisibility(View.VISIBLE);
                     PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(getOTPbackend,enteredotp);
                     FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential).addOnCompleteListener(task -> {
+
+                        verifyotpbtn.setVisibility(View.VISIBLE);
+                        progressBar4.setVisibility(View.GONE);
                         if (task.isSuccessful()){
-                            verifyotpbtn.setVisibility(View.VISIBLE);
-                            progressBar4.setVisibility(View.GONE);
-                            Intent intent1 = new Intent(getApplicationContext(),HomeActivity.class);
+                            Intent intent1 = new Intent(getApplicationContext(),WelcomeActivity.class);
                             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent1);
                         }
@@ -81,7 +84,6 @@ public class OTPActivity extends AppCompatActivity {
                         }
                     });
                 }
-//                    Toast.makeText(OTPActivity.this, "OTP Verify", Toast.LENGTH_SHORT).show();
             }
             else{
                 Toast.makeText(OTPActivity.this, "Please enter all number", Toast.LENGTH_SHORT).show();
