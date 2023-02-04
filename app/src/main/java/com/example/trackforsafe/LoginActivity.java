@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,12 +51,12 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         forgotpass.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(),forgotpassword_activity.class);
+            Intent intent = new Intent(getApplicationContext(), forgotpassword_activity.class);
             startActivity(intent);
         });
 
         signup.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+            Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
             startActivity(intent);
         });
 
@@ -64,60 +65,56 @@ public class LoginActivity extends AppCompatActivity {
             String username = Objects.requireNonNull(usernameoremail.getEditText()).getText().toString().trim();
             String pass = Objects.requireNonNull(password.getEditText()).getText().toString().trim();
 
-            if(username.equals("") || pass.equals("")){
+            if (username.equals("") || pass.equals("")) {
                 Toast.makeText(this, "Please enter required fields", Toast.LENGTH_SHORT).show();
-            }
-            else{
+            } else {
                 loginbtn.setVisibility(View.GONE);
                 progressBar1.setVisibility(View.VISIBLE);
-//                databaseReference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        if(!validateEmail()){
-//                            final String databasephone = Objects.requireNonNull(snapshot.child(username).child("Phone Number").getValue()).toString();
-//                            if(username.equals(databasephone)){
-//                                final String getPass = Objects.requireNonNull(snapshot.child(username).child("Password").getValue()).toString();
-//                                if(getPass.equals(pass)){
-//                                    loginbtn.setVisibility(View.VISIBLE);
-//                                    progressBar1.setVisibility(View.GONE);
-//                                    Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
-//                                    Intent intent = new Intent(getApplicationContext(),MobileNumberActivity.class);
-//                                    startActivity(intent);
-//                                    finish();
-//                                }
-//                                else{
-//                                    Toast.makeText(LoginActivity.this, "Please enter valid password", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                            else{
-//                                Toast.makeText(LoginActivity.this, "Please do registration first", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                        else{
-                            mAuth.signInWithEmailAndPassword(username,pass).addOnCompleteListener(task -> {
+
+                databaseReference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (!validateEmail()) {
+                            final String databasephone = Objects.requireNonNull(snapshot.child(username).child("Phone Number").getValue()).toString();
+                            if (username.equals(databasephone)) {
+                                final String getPass = Objects.requireNonNull(snapshot.child(username).child("Password").getValue()).toString();
+                                if (getPass.equals(pass)) {
+                                    loginbtn.setVisibility(View.VISIBLE);
+                                    progressBar1.setVisibility(View.GONE);
+                                    Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), MobileNumberActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "Please enter valid password", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Please do registration first", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            mAuth.signInWithEmailAndPassword(username, pass).addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     loginbtn.setVisibility(View.VISIBLE);
                                     progressBar1.setVisibility(View.GONE);
                                     Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(LoginActivity.this,MobileNumberActivity.class));
+                                    startActivity(new Intent(LoginActivity.this, MobileNumberActivity.class));
                                 } else {
                                     loginbtn.setVisibility(View.VISIBLE);
                                     progressBar1.setVisibility(View.GONE);
                                     Toast.makeText(LoginActivity.this, "Login Error : " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
-//                        }
-//                    }
+                        }
+                    }
 
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//
-//                    }
-//                });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
     }
-
     private boolean validateEmail() {
         String email1 = Objects.requireNonNull(usernameoremail.getEditText()).getText().toString().trim();
         return Patterns.EMAIL_ADDRESS.matcher(email1).matches();

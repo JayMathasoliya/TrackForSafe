@@ -131,16 +131,8 @@ public class RegisterActivity extends AppCompatActivity {
                     StorageReference imageRef = storageReference.child(imgUri.getLastPathSegment());
                     UploadTask uploadTask = imageRef.putFile(imgUri);
 
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(RegisterActivity.this, "Image Upload Error : " + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    uploadTask.addOnFailureListener(e -> Toast.makeText(RegisterActivity.this, "Image Upload Error : " + e.getMessage(), Toast.LENGTH_SHORT).show()).addOnSuccessListener(taskSnapshot -> {
 
-                        }
                     });
                             databaseReference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
