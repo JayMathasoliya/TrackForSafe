@@ -121,7 +121,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
         alertDialog.setTitle("Exit App");
         alertDialog.setMessage("Do you want to exit app?");
